@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class App {
      public static void main(String[] args) throws Exception {
-        String filepathlocation = "src/main/java/project/config.json";
+        String filepathlocation = "app/src/main/java/project/config.json";
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter PC A IP address");
         String PCIP = scanner.nextLine();
@@ -84,6 +84,7 @@ public class App {
 
      
         File jsonFile = new File(filepathlocation);
+        System.out.println(jsonFile);
         JsonNode rootNode = mapper.readTree(jsonFile);
 
    
