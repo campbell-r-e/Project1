@@ -20,7 +20,7 @@ public class dataparser {
     
          
             File jsonFile = new File(filepathlocation);
-        System.out.println(jsonFile);
+            System.out.println(jsonFile);
         JsonNode rootNode = mapper.readTree(jsonFile);
 
    
