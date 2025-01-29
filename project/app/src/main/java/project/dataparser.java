@@ -9,16 +9,42 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class dataparser {
-    String id;
-    String filepathlocation = "app/src/main/java/project/config.json";
-
-    public dataparser(String id){
-     id= this.id;
+   
+     String filepathlocation = "app/src/main/java/project/config.json";
       
+       
+    
+        public ArrayList<JsonNode> find(String id) throws IOException{
+    
+            ObjectMapper mapper = new ObjectMapper();
+    
+         
+            File jsonFile = new File(filepathlocation);
+        System.out.println(jsonFile);
+        JsonNode rootNode = mapper.readTree(jsonFile);
+
+   
+        JsonNode idNode = rootNode.get("topology");
+            
+            ObjectNode idObjectNode = (ObjectNode) idNode;
+
+         
+            JsonNode PCAtargetNode = idObjectNode.get(id);
+      
+            ArrayNode PCAtargetArray = (ArrayNode) PCAtargetNode;
+
+ 
+
+
+            
+
+            
+            ArrayList<JsonNode> obArrayList = new ArrayList<>();
+            PCAtargetArray.forEach(obArrayList::add);
+    
+            return obArrayList;
     }
-
-    public ArrayList find() throws IOException{
-
+    public ArrayList<JsonNode> parser(ArrayList<JsonNode> obArrayList) throws IOException{
         ObjectMapper mapper = new ObjectMapper();
 
      
@@ -27,21 +53,27 @@ public class dataparser {
         JsonNode rootNode = mapper.readTree(jsonFile);
 
    
-        JsonNode idNode = rootNode.get("id");
+        JsonNode idNode = rootNode.get("topology");
             
             ObjectNode idObjectNode = (ObjectNode) idNode;
-
+            String id ="";
          
-            JsonNode PCAtargetNode = idObjectNode.get("a");
+            JsonNode PCAtargetNode = idObjectNode.get(id);
       
             ArrayNode PCAtargetArray = (ArrayNode) PCAtargetNode;
 
  
 
 
+            
 
-        ArrayList obArrayList = new ArrayList<>();
-        return obArrayList;
+            
+            ArrayList<JsonNode> data = new ArrayList<>();
+            PCAtargetArray.forEach(obArrayList::add);
+
+
+            return data;
+
     }
 
 
