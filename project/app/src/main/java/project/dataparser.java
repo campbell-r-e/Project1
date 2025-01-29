@@ -50,17 +50,23 @@ public class dataparser {
      
         File jsonFile = new File(filepathlocation);
         System.out.println(jsonFile);
+        ArrayList<JsonNode> data = new ArrayList<>();
         JsonNode rootNode = mapper.readTree(jsonFile);
 
    
-        JsonNode idNode = rootNode.get("topology");
+        JsonNode idNode = rootNode.get("id");
             
             ObjectNode idObjectNode = (ObjectNode) idNode;
-            String id ="";
-         
-            JsonNode PCAtargetNode = idObjectNode.get(id);
+            for(JsonNode id:obArrayList){
+                String ids=id.toPrettyString();
+
+                JsonNode PCAtargetNode = idObjectNode.get(ids);
       
-            ArrayNode PCAtargetArray = (ArrayNode) PCAtargetNode;
+                ArrayNode PCAtargetArray = (ArrayNode) PCAtargetNode;
+                PCAtargetArray.forEach(obArrayList::add);
+            }
+         
+            
 
  
 
@@ -68,8 +74,8 @@ public class dataparser {
             
 
             
-            ArrayList<JsonNode> data = new ArrayList<>();
-            PCAtargetArray.forEach(obArrayList::add);
+         
+            
 
 
             return data;
