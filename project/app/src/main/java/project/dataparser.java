@@ -1,83 +1,39 @@
 package project;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
-public class dataparser {
-   
-     String filepathlocation = "app/src/main/java/project/config.json";
-      
-       
-    
-        public ArrayList<JsonNode> find(String id) throws IOException{
-    
-            ObjectMapper mapper = new ObjectMapper();
-    
-         
-            File jsonFile = new File(filepathlocation);
-        System.out.println(jsonFile);
-        JsonNode rootNode = mapper.readTree(jsonFile);
+public class DataParser {
+    private static final String FILE_PATH = "config.json";
 
-   
-        JsonNode idNode = rootNode.get("topology");
-            
-            ObjectNode idObjectNode = (ObjectNode) idNode;
-
-         
-            JsonNode PCAtargetNode = idObjectNode.get(id);
-      
-            ArrayNode PCAtargetArray = (ArrayNode) PCAtargetNode;
-
- 
-
-
-            
-
-            
-            ArrayList<JsonNode> obArrayList = new ArrayList<>();
-            PCAtargetArray.forEach(obArrayList::add);
-    
-            return obArrayList;
-    }
-    public ArrayList<JsonNode> parser(ArrayList<JsonNode> obArrayList) throws IOException{
+    public List<JsonNode> find(String id) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-
-     
-        File jsonFile = new File(filepathlocation);
-        System.out.println(jsonFile);
-        JsonNode rootNode = mapper.readTree(jsonFile);
-
-   
-        JsonNode idNode = rootNode.get("topology");
-            
-            ObjectNode idObjectNode = (ObjectNode) idNode;
-            String id ="";
-         
-            JsonNode PCAtargetNode = idObjectNode.get(id);
-      
-            ArrayNode PCAtargetArray = (ArrayNode) PCAtargetNode;
-
- 
-
-
-            
-
-            
-            ArrayList<JsonNode> data = new ArrayList<>();
-            PCAtargetArray.forEach(obArrayList::add);
-
-
-            return data;
-
+        JsonNode rootNode = mapper.readTree(new File(FILE_PATH));
+        JsonNode topologyNode = rootNode.get("topology").get(id);
+        
+        List<JsonNode> neighbors = new ArrayList<>();
+        if (topologyNode != null && topologyNode.isArray()) {
+            topologyNode.forEach(neighbors::add);
+        }
+        return neighbors;
     }
 
+    public List<JsonNode> parser(List<JsonNode> neighbors) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode rootNode = mapper.readTree(new File(FILE_PATH));
+        JsonNode idNode = rootNode.get("id");
 
-
-
-    
+        List<JsonNode> details = new ArrayList<>();
+        for (JsonNode node : neighbors) {
+            JsonNode device = idNode.get(node.asText());
+            if (device != null) {
+                device.forEach(details::add);
+            }
+        }
+        return details;
+    }
 }
