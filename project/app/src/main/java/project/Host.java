@@ -45,9 +45,9 @@ public class Host {
         }
     }
     private byte[]createFrame(String destMac, String Message){
-        byte[]sourceMacBytes=macAddress.getBytes(StandardCharsets.UTF_8);
-        byte[]destMacBytes=destMac.getBytes(StandardCharsets.UTF_8);
-        byte[]messageBytes=Message.getBytes(StandardCharsets.UTF_8);
+        byte[] sourceMacBytes = binaryConversion(macAddress, 6);  // Fixed 6 bytes for MAC
+        byte[] destMacBytes = binaryConversion(destMac, 6);
+        byte[] messageBytes = binaryConversion(Message, 64);
         byte[]frame=new byte[sourceMacBytes.length+destMacBytes.length+messageBytes.length];
         System.arraycopy(sourceMacBytes,0,frame,0,sourceMacBytes.length);
         System.arraycopy(destMacBytes,0,frame,sourceMacBytes.length,destMacBytes.length);
@@ -73,13 +73,21 @@ public class Host {
 
         }
     }
+    private byte[]binaryConversion(String input, int length){
+        byte[]binaryData=new byte[length];
+        byte[] inputBytes = input.getBytes(StandardCharsets.UTF_8);
+        System.arraycopy(inputBytes, 0, binaryData, 0, Math.min(inputBytes.length, length));
+        return binaryData;
+
+    }
 
     public static void main(String[] args) {
         if(args.length!=2){
             System.out.println("usage: Java Host <HostID> <ConfigFile>");
             return;
         }
-        new Host(args[0], args[1]);
+        Host host=new Host(args[0], args[1]);
+        host.frameSender();
     }
 
 
