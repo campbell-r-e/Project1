@@ -5,26 +5,26 @@ import java.util.ArrayList;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class ReceivingHost {
-    private String hostID, macAddress;
+    private String receivingID, macAddress;
     private DatagramSocket socket;
 
-    public ReceivingHost(String hostID, String configFile) {
-        this.hostID = hostID;
-        this.macAddress = hostID; //same value -> pass as arg
+    public ReceivingHost(String receivingID, String configFile) {
+        this.hostID = receivingID;
+        this.macAddress = receivingID; //same value -> pass as arg
 // constructor receivHst reads host if & port  from config file 
 
         try {
             dataparser parser = new dataparser();
-            ArrayList<JsonNode> hostData = parser.find(hostID);
+            ArrayList<JsonNode> receivingData = parser.find(receivingID);
 // init data parser & get host data from config file 
 
             int hostPort = 0;
-            for (JsonNode node : hostData) {
+            for (JsonNode node : receivingData) {
                 if (node.has("port")) {
                     hostPort = node.get("port").asInt();
                 }
             }
-// lopp hostID in config to find its port number 
+// lopp receivingID in config to find its port number 
 
 
             if (hostPort == 0) {
@@ -36,7 +36,7 @@ public class ReceivingHost {
             this.socket = new DatagramSocket(hostPort); //-> bind socket to get msgs
 // make udp socket in host's port 
 
-            System.out.println("Receiving host: " + hostID + " listening on port " + hostPort);
+            System.out.println("Receiving host: " + receivingID + " listening on port " + hostPort);
         } catch (Exception e) {
             System.err.println("Error initializing host: " + e.getMessage());
             System.exit(1);
@@ -72,7 +72,7 @@ public class ReceivingHost {
 
     public static void main(String[] args) {
         if (args.length != 2) {
-            System.out.println("Usage: java ReceivingHost <HostID> <ConfigFile>");
+            System.out.println("Usage: java ReceivingHost <receivingID> <ConfigFile>");
             return;
         }
         ReceivingHost receiver = new ReceivingHost(args[0], args[1]);
