@@ -53,13 +53,13 @@ public class ReceivingHost {
                 
                 // extract vf + decode binaries 
                 byte[] frame = packet.getData();
-                String sourceMac = new String(frame, 0, 10, StandardCharsets.UTF_8).trim();//1st 10 bytes 
+                String senderMac = new String(frame, 0, 10, StandardCharsets.UTF_8).trim();//1st 10 bytes 
                 String destMac = new String(frame, 10, 10, StandardCharsets.UTF_8).trim();//next 10
                 String message = new String(frame, 20, frame.length - 20, StandardCharsets.UTF_8).trim();//remining 
 
                 // check if frame is mine 
                 if (destMac.equals(macAddress)) {
-                    System.out.println("Received message from " + sourceMac + ": " + message);
+                    System.out.println("Received message from " + senderMac + ": " + message);
                 } else {
                     System.out.println("Frame Ignored.");
                 }
