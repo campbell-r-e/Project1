@@ -51,7 +51,7 @@ public class ReceivingHost {
                 socket.receive(packet); // recive packet
 //make udp packet to store data + wait for packet to put in buffer
                 
-                // extract vf
+                // extract vf + decode binaries 
                 byte[] frame = packet.getData();
                 String sourceMac = new String(frame, 0, 10, StandardCharsets.UTF_8).trim();//1st 10 bytes 
                 String destMac = new String(frame, 10, 10, StandardCharsets.UTF_8).trim();//next 10
